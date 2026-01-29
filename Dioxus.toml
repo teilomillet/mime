@@ -1,0 +1,31 @@
+[application]
+name = "argo"
+default_platform = "desktop"
+
+[web.app]
+title = "Argo - Notes"
+
+[web.resource]
+style = ["/assets/main.css"]
+
+[web.watcher]
+reload_html = true
+watch_path = ["src", "assets"]
+
+[desktop]
+always_on_top = false
+
+[[desktop.menu.sub_menu]]
+name = "File"
+items = [
+    { name = "New Note", accelerator = "CmdOrCtrl+N", event = "new_note" },
+    { name = "---" },
+    { name = "Quit", accelerator = "CmdOrCtrl+Q", event = "quit" },
+]
+
+[[desktop.menu.sub_menu]]
+name = "View"
+items = [
+    { name = "Toggle Sidebar", accelerator = "CmdOrCtrl+B", event = "toggle_sidebar" },
+    { name = "Toggle Preview", accelerator = "CmdOrCtrl+P", event = "toggle_preview" },
+]
