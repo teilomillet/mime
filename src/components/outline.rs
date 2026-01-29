@@ -32,7 +32,7 @@ pub fn extract_headings(content: &str) -> Vec<HeadingInfo> {
 }
 
 #[component]
-pub fn Outline(content: String) -> Element {
+pub fn Outline(content: String, on_jump: EventHandler<usize>) -> Element {
     let headings = extract_headings(&content);
 
     rsx! {
@@ -42,9 +42,11 @@ pub fn Outline(content: String) -> Element {
                     div {
                         class: "outline-item level-{heading.level}",
                         title: "{heading.text}",
-                        // Indicator dot/bar
+                        onclick: {
+                            let line = heading.line;
+                            move |_| on_jump.call(line)
+                        },
                         span { class: "outline-indicator" }
-                        // Full text (shown on expand)
                         span { class: "outline-text", "{heading.text}" }
                     }
                 }

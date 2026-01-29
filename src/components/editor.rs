@@ -1,11 +1,15 @@
 use crate::state::SaveStatus;
+use dioxus::document::eval;
 use dioxus::prelude::*;
+
+const LINE_HEIGHT_PX: f64 = 24.0;
 
 #[component]
 pub fn Editor(
     content: String,
     save_status: SaveStatus,
     on_change: EventHandler<String>,
+    #[props(default)] jump_to_line: Option<usize>,
 ) -> Element {
     let status_text = match save_status {
         SaveStatus::Saved => "Saved",
@@ -21,13 +25,88 @@ pub fn Editor(
         SaveStatus::Error => "status-error",
     };
 
+    let content_for_bold = content.clone();
+    let content_for_italic = content.clone();
+    let content_for_link = content.clone();
+    let content_for_code = content.clone();
+    let content_for_heading = content.clone();
+
+    use_effect(move || {
+        if let Some(line) = jump_to_line {
+            let scroll_pos = (line as f64) * LINE_HEIGHT_PX;
+            let js = format!(
+                r#"
+                const textarea = document.querySelector('.editor-textarea');
+                if (textarea) {{
+                    textarea.scrollTop = {scroll_pos};
+                }}
+                "#
+            );
+            eval(&js);
+        }
+    });
+
     rsx! {
         div { class: "editor",
+            div { class: "editor-format-bar",
+                button {
+                    class: "btn-format",
+                    title: "Bold (Ctrl+B)",
+                    onclick: move |_| on_change.call(format!("{}****", content_for_bold)),
+                    "B"
+                }
+                button {
+                    class: "btn-format btn-format-italic",
+                    title: "Italic (Ctrl+I)",
+                    onclick: move |_| on_change.call(format!("{}**", content_for_italic)),
+                    "I"
+                }
+                button {
+                    class: "btn-format",
+                    title: "Link (Ctrl+K)",
+                    onclick: move |_| on_change.call(format!("{}[](url)", content_for_link)),
+                    "🔗"
+                }
+                button {
+                    class: "btn-format btn-format-code",
+                    title: "Inline Code",
+                    onclick: move |_| on_change.call(format!("{}``", content_for_code)),
+                    "<>"
+                }
+                button {
+                    class: "btn-format",
+                    title: "Heading",
+                    onclick: move |_| on_change.call(format!("{}\n# ", content_for_heading)),
+                    "H"
+                }
+            }
             textarea {
                 class: "editor-textarea",
                 placeholder: "Start writing...",
                 value: "{content}",
                 oninput: move |evt| on_change.call(evt.value()),
+                onkeydown: move |evt: KeyboardEvent| {
+                    if evt.modifiers().ctrl() || evt.modifiers().meta() {
+                        match evt.key() {
+                            Key::Character(c) if c == "b" || c == "B" => {
+                                evt.prevent_default();
+                                let new_content = format!("{}****", content);
+                                on_change.call(new_content);
+                            }
+                            Key::Character(c) if c == "i" || c == "I" => {
+                                evt.prevent_default();
+                                let new_content = format!("{}**", content);
+                                on_change.call(new_content);
+                            }
+                            Key::Character(c) if c == "k" || c == "K" => {
+                                evt.prevent_default();
+                                let new_content = format!("{}[](url)", content);
+                                on_change.call(new_content);
+                            }
+                            _ => {}
+                        }
+                    }
+                },
             }
             div { class: "editor-status {status_class}",
                 "{status_text}"

@@ -16,7 +16,15 @@ const PRESET_DURATIONS: &[(u64, &str)] = &[
 ];
 
 #[component]
-pub fn StatusBar() -> Element {
+pub fn StatusBar(#[props(default)] content: Option<String>) -> Element {
+    let (word_count, reading_time) = content
+        .as_ref()
+        .map(|c| {
+            let words = c.split_whitespace().count();
+            let minutes = (words as f64 / 200.0).ceil() as usize;
+            (words, minutes.max(1))
+        })
+        .unwrap_or((0, 0));
     let mut remaining_seconds = use_signal(|| 25u64 * 60);
     let mut initial_seconds = use_signal(|| 25u64 * 60);
     let mut timer_state = use_signal(|| TimerState::Stopped);
@@ -63,6 +71,13 @@ pub fn StatusBar() -> Element {
             onmouseleave: move |_| is_hovered.set(false),
 
             div { class: "status-bar-content",
+                // Word count display
+                if word_count > 0 {
+                    div { class: "word-count",
+                        "{word_count} words · {reading_time} min read"
+                    }
+                }
+
                 // Duration presets
                 div { class: "timer-presets",
                     for (duration, label) in PRESET_DURATIONS.iter() {
