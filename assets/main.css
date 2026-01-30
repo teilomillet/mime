@@ -222,18 +222,13 @@ body {
     left: 1.5rem;
     top: 50%;
     transform: translateY(-50%);
-    width: 200px;
-    max-height: 70vh;
+    width: 180px;
+    max-height: 60vh;
     display: flex;
     flex-direction: column;
     z-index: 50;
     padding: 0;
-    opacity: 0;
-    transition: opacity 0.2s ease;
-}
-
-.outline:hover {
-    opacity: 1;
+    overflow-y: auto;
 }
 
 .outline-track {
@@ -1058,6 +1053,7 @@ body {
 
 .focus-mode .outline {
     opacity: 0;
+    transition: opacity 0.2s ease;
 }
 
 .focus-mode .outline:hover {
