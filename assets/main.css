@@ -1114,8 +1114,9 @@ body {
 /* ========== FOCUS MODE ========== */
 .focus-mode .outline,
 .focus-mode .sidebar,
-.focus-mode .status-bar {
-    display: none;
+.focus-mode .status-bar,
+.focus-mode .editor-status {
+    display: none !important;
 }
 
 .focus-mode .toolbar {
