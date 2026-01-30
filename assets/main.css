@@ -74,140 +74,6 @@ body {
     position: relative;
 }
 
-/* ========== TOOLBAR (Top Right) ========== */
-.toolbar {
-    position: absolute;
-    top: 1.25rem;
-    right: 1.25rem;
-    display: flex;
-    align-items: center;
-    gap: 0.125rem;
-    padding: 0.25rem;
-    background: var(--bg-secondary);
-    border: 1px solid var(--border);
-    border-radius: 8px;
-    opacity: 0;
-    transition: opacity var(--ui-transition);
-    z-index: 200;
-    box-shadow: var(--panel-shadow);
-}
-
-.toolbar:hover,
-.app-container:not(.focus-mode):hover .toolbar {
-    opacity: 1;
-}
-
-.toolbar-divider {
-    width: 1px;
-    height: 18px;
-    background: var(--border);
-    margin: 0 0.375rem;
-}
-
-.btn-toolbar {
-    background: transparent;
-    border: none;
-    color: var(--text-muted);
-    padding: 0.5rem;
-    border-radius: 6px;
-    cursor: pointer;
-    transition: all var(--ui-transition);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    width: 32px;
-    height: 32px;
-}
-
-.btn-toolbar:hover {
-    background: var(--bg-hover);
-    color: var(--text-primary);
-}
-
-.btn-toolbar.active {
-    color: var(--accent);
-    background: var(--accent-subtle);
-}
-
-.btn-toolbar.btn-delete:hover {
-    color: var(--danger);
-    background: rgba(229, 91, 91, 0.1);
-}
-
-/* ========== CSS ICONS ========== */
-.icon-menu {
-    width: 15px;
-    height: 11px;
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
-}
-
-.icon-menu::before,
-.icon-menu::after {
-    content: '';
-    height: 1.5px;
-    background: currentColor;
-    border-radius: 1px;
-}
-
-.icon-menu::before {
-    box-shadow: 0 4.5px 0 currentColor;
-}
-
-.icon-preview {
-    width: 15px;
-    height: 11px;
-    border: 1.5px solid currentColor;
-    border-radius: 2px;
-    position: relative;
-}
-
-.icon-preview::after {
-    content: '';
-    position: absolute;
-    left: 50%;
-    top: 50%;
-    transform: translate(-50%, -50%);
-    width: 3px;
-    height: 3px;
-    background: currentColor;
-    border-radius: 50%;
-}
-
-.icon-delete {
-    width: 12px;
-    height: 14px;
-    border: 1.5px solid currentColor;
-    border-top: none;
-    border-radius: 0 0 2px 2px;
-    position: relative;
-}
-
-.icon-delete::before {
-    content: '';
-    position: absolute;
-    top: -3px;
-    left: -3px;
-    right: -3px;
-    height: 1.5px;
-    background: currentColor;
-    border-radius: 1px;
-}
-
-.icon-delete::after {
-    content: '';
-    position: absolute;
-    top: -6px;
-    left: 50%;
-    transform: translateX(-50%);
-    width: 5px;
-    height: 2px;
-    border: 1.5px solid currentColor;
-    border-bottom: none;
-    border-radius: 2px 2px 0 0;
-}
-
 /* ========== MAIN CONTENT ========== */
 .main-content {
     flex: 1;
@@ -221,19 +87,21 @@ body {
     position: fixed;
     left: 0;
     top: 0;
-    bottom: 0;
+    bottom: 80px; /* Keep away from Mac dock */
     width: 220px;
     padding: 5.5rem 0 2rem 2.5rem;
     display: flex;
     flex-direction: column;
     z-index: 50;
     overflow-y: auto;
-    opacity: 0;
+    opacity: 1; /* Visible by default */
     transition: opacity 0.15s ease;
+    border-right: 2px solid transparent; /* Add small visual indicator on hover */
+    pointer-events: auto; /* Always accept hover events */
 }
 
 .outline:hover {
-    opacity: 1;
+    border-right-color: var(--border-subtle); /* Show edge when hovering */
 }
 
 .outline-track {
@@ -725,73 +593,100 @@ body {
     color: white;
 }
 
-/* ========== STATUS BAR (Bottom - Fades when not hovered) ========== */
+/* ========== STATUS BAR (Bottom - Unified Controls) ========== */
 .status-bar {
     position: fixed;
     bottom: 0;
     left: 0;
     right: 0;
-    height: 48px;
+    height: 56px;
     display: flex;
     align-items: center;
     justify-content: center;
     background: linear-gradient(to top, var(--bg-primary), transparent);
-    opacity: 0.15;
-    transition: opacity 0.4s ease, background 0.4s ease;
+    opacity: 0;
+    transition: opacity 0.3s ease;
     z-index: 100;
-    padding: 0 2rem;
+    padding: 0 1rem;
 }
 
 .status-bar:hover,
 .status-bar.status-bar-visible {
     opacity: 1;
-    background: linear-gradient(to top, var(--bg-secondary) 60%, transparent);
 }
 
 .status-bar-content {
     display: flex;
     align-items: center;
-    gap: 1.5rem;
+    justify-content: space-between;
+    gap: 1rem;
     padding: 0.5rem 1rem;
-    background: var(--bg-tertiary);
+    background: var(--bg-secondary);
     border: 1px solid var(--border);
-    border-radius: 24px;
-    opacity: 0;
-    transform: translateY(8px);
-    transition: all 0.3s ease;
+    border-radius: 12px;
+    box-shadow: var(--panel-shadow);
+    max-width: 700px;
+    width: 100%;
 }
 
-.status-bar:hover .status-bar-content,
-.status-bar.status-bar-visible .status-bar-content {
-    opacity: 1;
-    transform: translateY(0);
-}
-
-.word-count {
-    font-size: 0.75rem;
-    color: var(--text-muted);
-    padding-right: 0.75rem;
-    border-right: 1px solid var(--border);
-    white-space: nowrap;
-}
-
-.timer-presets {
+.bar-section {
     display: flex;
     align-items: center;
     gap: 0.25rem;
-    padding-right: 0.75rem;
-    border-right: 1px solid var(--border);
+}
+
+.bar-center {
+    flex: 1;
+    justify-content: center;
+    gap: 0.75rem;
+}
+
+.btn-bar {
+    background: transparent;
+    border: none;
+    color: var(--text-muted);
+    padding: 0.375rem 0.5rem;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 0.875rem;
+    transition: all var(--ui-transition);
+}
+
+.btn-bar:hover {
+    background: var(--bg-hover);
+    color: var(--text-primary);
+}
+
+.btn-bar.active {
+    color: var(--accent);
+}
+
+.btn-bar.btn-delete:hover {
+    color: var(--danger);
+}
+
+.word-count {
+    font-family: var(--font-mono);
+    font-size: 0.6875rem;
+    color: var(--text-muted);
+    white-space: nowrap;
+}
+
+.timer-group {
+    display: flex;
+    align-items: center;
+    gap: 0.25rem;
 }
 
 .btn-preset {
     background: transparent;
     border: none;
     color: var(--text-muted);
-    padding: 0.25rem 0.5rem;
+    padding: 0.25rem 0.375rem;
     border-radius: 4px;
     cursor: pointer;
     font-family: var(--font-mono);
-    font-size: 0.75rem;
+    font-size: 0.6875rem;
     transition: all var(--ui-transition);
 }
 
@@ -805,44 +700,27 @@ body {
     background: var(--accent-subtle);
 }
 
-.timer-display {
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
-}
-
 .timer-time {
     font-family: var(--font-mono);
-    font-size: 1rem;
+    font-size: 0.75rem;
     color: var(--text-secondary);
     min-width: 5ch;
     text-align: center;
-    transition: color var(--ui-transition);
 }
 
 .timer-time.timer-finished {
     color: var(--accent);
 }
 
-.timer-controls {
-    display: flex;
-    align-items: center;
-    gap: 0.25rem;
-}
-
 .btn-timer {
     background: transparent;
     border: none;
     color: var(--text-muted);
-    padding: 0.375rem;
-    border-radius: 50%;
+    padding: 0.25rem 0.375rem;
+    border-radius: 4px;
     cursor: pointer;
+    font-size: 0.75rem;
     transition: all var(--ui-transition);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    width: 28px;
-    height: 28px;
 }
 
 .btn-timer:hover {
@@ -1047,38 +925,52 @@ body {
 }
 
 /* ========== FOCUS MODE ========== */
-.focus-mode .status-bar,
 .focus-mode .editor-status {
     display: none !important;
 }
 
+.focus-mode .status-bar {
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+.focus-mode .status-bar.status-bar-visible {
+    opacity: 0;
+}
+
+.focus-mode .status-bar:hover {
+    opacity: 1;
+    transition-delay: 0.2s;
+}
+
+.focus-mode .editor-textarea {
+    caret-color: var(--text-muted);
+}
+
+.focus-mode ::selection {
+    background: var(--accent-subtle);
+    color: var(--text-secondary);
+}
+
 .focus-mode .outline {
     opacity: 0;
-    transition: opacity 0.2s ease;
+    transition: opacity 0.3s ease;
 }
 
 .focus-mode .outline:hover {
     opacity: 1;
+    transition: opacity 0.2s ease;
+    transition-delay: 0.2s;
 }
 
 .focus-mode .sidebar {
     opacity: 0;
-    pointer-events: none;
     transition: opacity 0.3s ease;
 }
 
 .focus-mode .sidebar:hover {
     opacity: 1;
-    pointer-events: auto;
-}
-
-.focus-mode .toolbar {
-    opacity: 0;
-    transition: opacity var(--ui-transition);
-}
-
-.focus-mode .toolbar:hover {
-    opacity: 1;
+    transition-delay: 0.2s;
 }
 
 .focus-mode .editor-area {

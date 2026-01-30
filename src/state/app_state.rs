@@ -8,7 +8,6 @@ pub struct AppState {
     pub current_note: Signal<Option<Note>>,
     pub deleted_note: Signal<Option<Note>>,
     pub is_sidebar_visible: Signal<bool>,
-    pub is_outline_visible: Signal<bool>,
     pub is_preview_visible: Signal<bool>,
     pub is_focus_mode: Signal<bool>,
     pub save_status: Signal<SaveStatus>,
@@ -25,7 +24,6 @@ impl AppState {
             current_note: Signal::new(None),
             deleted_note: Signal::new(None),
             is_sidebar_visible: Signal::new(false),
-            is_outline_visible: Signal::new(false),
             is_preview_visible: Signal::new(false),
             is_focus_mode: Signal::new(false),
             save_status: Signal::new(SaveStatus::Saved),
@@ -119,11 +117,6 @@ impl AppState {
     pub fn toggle_sidebar(&mut self) {
         let current = (self.is_sidebar_visible)();
         self.is_sidebar_visible.set(!current);
-    }
-
-    pub fn toggle_outline(&mut self) {
-        let current = (self.is_outline_visible)();
-        self.is_outline_visible.set(!current);
     }
 
     pub fn toggle_preview(&mut self) {

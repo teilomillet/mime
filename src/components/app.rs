@@ -5,7 +5,6 @@ use crate::components::quick_switcher::QuickSwitcher;
 use crate::components::sidebar::Sidebar;
 use crate::components::status_bar::StatusBar;
 use crate::components::toast::Toast;
-use crate::components::toolbar::Toolbar;
 use crate::state::{AppState, SaveStatus};
 use dioxus::document::eval;
 use dioxus::prelude::*;
@@ -111,26 +110,6 @@ pub fn App() -> Element {
                 }
             },
 
-            Toolbar {
-                is_sidebar_visible,
-                is_preview_visible,
-                is_focus_mode,
-                has_note,
-                font_size: font_size(),
-                on_toggle_sidebar: move |_| state.write().toggle_sidebar(),
-                on_toggle_preview: move |_| state.write().toggle_preview(),
-                on_toggle_focus: move |_| state.write().toggle_focus_mode(),
-                on_delete: move |_| state.write().delete_current_note(),
-                on_font_size_change: move |size: u8| {
-                    font_size.set(size);
-                    let js = format!(
-                        "document.documentElement.style.setProperty('--font-size-editor', '{}px')",
-                        size
-                    );
-                    eval(&js);
-                },
-            }
-
             div { class: "main-content",
                 // Left: Document outline (always visible when note is open)
                 if has_note {
@@ -183,8 +162,27 @@ pub fn App() -> Element {
                 }
             }
 
-            // Bottom: Status bar with timer (fades when not hovered)
-            StatusBar { content: if has_note { Some(content.clone()) } else { None } }
+            // Bottom: Unified control bar
+            StatusBar {
+                content: if has_note { Some(content.clone()) } else { None },
+                has_note,
+                is_sidebar_visible,
+                is_preview_visible,
+                is_focus_mode,
+                font_size: font_size(),
+                on_toggle_sidebar: move |_| state.write().toggle_sidebar(),
+                on_toggle_preview: move |_| state.write().toggle_preview(),
+                on_toggle_focus: move |_| state.write().toggle_focus_mode(),
+                on_delete: move |_| state.write().delete_current_note(),
+                on_font_size_change: move |size: u8| {
+                    font_size.set(size);
+                    let js = format!(
+                        "document.documentElement.style.setProperty('--font-size-editor', '{}px')",
+                        size
+                    );
+                    eval(&js);
+                },
+            }
 
             // Quick Switcher modal
             if is_quick_switcher_open() {
