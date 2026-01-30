@@ -759,52 +759,6 @@ body {
     border: 1px solid var(--border);
 }
 
-/* ========== EDITOR FORMAT BAR ========== */
-.editor-format-bar {
-    display: flex;
-    align-items: center;
-    gap: 0.25rem;
-    padding: 0.375rem 0.5rem;
-    background: var(--bg-tertiary);
-    border-bottom: 1px solid var(--border-subtle);
-    opacity: 0;
-    transition: opacity var(--ui-transition);
-}
-
-.editor:hover .editor-format-bar,
-.editor-format-bar:focus-within {
-    opacity: 1;
-}
-
-.btn-format {
-    background: transparent;
-    border: none;
-    color: var(--text-muted);
-    padding: 0.25rem 0.5rem;
-    border-radius: 4px;
-    cursor: pointer;
-    font-family: var(--font-sans);
-    font-size: 0.8125rem;
-    font-weight: 600;
-    transition: all var(--ui-transition);
-    min-width: 28px;
-    text-align: center;
-}
-
-.btn-format:hover {
-    background: var(--bg-hover);
-    color: var(--text-primary);
-}
-
-.btn-format-italic {
-    font-style: italic;
-}
-
-.btn-format-code {
-    font-family: var(--font-mono);
-    font-size: 0.75rem;
-}
-
 /* ========== SCROLLBAR ========== */
 ::-webkit-scrollbar {
     width: 8px;
