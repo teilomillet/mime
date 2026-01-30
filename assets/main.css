@@ -698,23 +698,16 @@ body {
     border: 1px solid var(--border);
 }
 
-/* ========== SCROLLBAR ========== */
+/* ========== SCROLLBAR (hidden for cleaner look) ========== */
 ::-webkit-scrollbar {
-    width: 8px;
-    height: 8px;
+    width: 0;
+    height: 0;
+    display: none;
 }
 
-::-webkit-scrollbar-track {
-    background: transparent;
-}
-
-::-webkit-scrollbar-thumb {
-    background: var(--border);
-    border-radius: 4px;
-}
-
-::-webkit-scrollbar-thumb:hover {
-    background: rgba(255, 255, 255, 0.15);
+/* Firefox */
+* {
+    scrollbar-width: none;
 }
 
 /* Selection */
