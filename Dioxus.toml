@@ -4,6 +4,7 @@ default_platform = "desktop"
 
 [web.app]
 title = "Argo - Notes"
+base_path = "argo"
 
 [web.resource]
 style = ["/assets/main.css"]
