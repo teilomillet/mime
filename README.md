@@ -2,6 +2,8 @@
 
 A distraction-free note-taking app built with Rust and Dioxus.
 
+brew install teilomillet/mime/mime
+
 ## Features
 
 - **Markdown Editor** with live preview
