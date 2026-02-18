@@ -2,7 +2,7 @@ use crate::state::note::{Note, NoteSummary};
 use crate::storage::traits::StorageBackend;
 use gloo_storage::{LocalStorage, Storage};
 
-const NOTES_INDEX_KEY: &str = "argo_notes_index";
+const NOTES_INDEX_KEY: &str = "mime_notes_index";
 
 #[derive(Clone)]
 pub struct WebStorage;
@@ -13,7 +13,7 @@ impl WebStorage {
     }
 
     fn note_key(id: &str) -> String {
-        format!("argo_note_{}", id)
+        format!("mime_note_{}", id)
     }
 
     fn load_index(&self) -> Vec<String> {

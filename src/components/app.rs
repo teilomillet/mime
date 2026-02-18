@@ -139,7 +139,7 @@ pub fn App() -> Element {
                     }
                 } else {
                     div { class: "welcome",
-                        h1 { "Argo" }
+                        h1 { "Mime" }
                         p { "A distraction-free note-taking app" }
                         p { class: "hint",
                             "Press "

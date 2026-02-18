@@ -1,10 +1,10 @@
 [application]
-name = "argo"
+name = "mime"
 default_platform = "desktop"
 
 [web.app]
-title = "Argo - Notes"
-base_path = "argo"
+title = "Mime - Notes"
+base_path = "mime"
 
 [web.resource]
 style = ["/assets/main.css"]
@@ -17,6 +17,10 @@ script = []
 [web.watcher]
 reload_html = true
 watch_path = ["src", "assets"]
+
+[bundle]
+identifier = "com.mime.app"
+publisher = "Mime"
 
 [desktop]
 always_on_top = false

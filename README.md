@@ -1,4 +1,4 @@
-# Argo
+# Mime
 
 A distraction-free note-taking app built with Rust and Dioxus.
 

@@ -1,0 +1,44 @@
+name: Release
+
+on:
+  push:
+    tags: ["v*"]
+
+permissions:
+  contents: write
+
+jobs:
+  build-macos:
+    runs-on: macos-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Install Rust
+        uses: dtolnay/rust-toolchain@stable
+
+      - name: Cache cargo
+        uses: Swatinem/rust-cache@v2
+
+      - name: Install Dioxus CLI
+        run: cargo install dioxus-cli --locked
+
+      - name: Bundle desktop app
+        run: dx bundle --platform desktop
+
+      - name: Upload DMG
+        uses: softprops/action-gh-release@v2
+        with:
+          files: target/dx/mime/bundle/macos/bundle/dmg/*.dmg
+
+  update-homebrew:
+    needs: build-macos
+    runs-on: ubuntu-latest
+    steps:
+      - name: Update Homebrew tap
+        uses: peter-evans/repository-dispatch@v3
+        with:
+          token: ${{ secrets.TAP_GITHUB_TOKEN }}
+          repository: teilomillet/homebrew-mime
+          event-type: update-formula
+          client-payload: '{"tag": "${{ github.ref_name }}"}'

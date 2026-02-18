@@ -12,7 +12,7 @@ impl DesktopStorage {
     pub fn new() -> Self {
         let notes_dir = dirs::home_dir()
             .unwrap_or_else(|| PathBuf::from("."))
-            .join(".argo")
+            .join(".mime")
             .join("notes");
 
         // Ensure directory exists

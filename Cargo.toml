@@ -1,8 +1,12 @@
 [package]
-name = "argo"
+name = "mime-app"
 version = "0.1.0"
-edition = "2021"
+edition = "2024"
 description = "A distraction-free note-taking app"
+
+[[bin]]
+name = "mime"
+path = "src/main.rs"
 
 [dependencies]
 dioxus = { version = "0.7", features = ["macro"] }
